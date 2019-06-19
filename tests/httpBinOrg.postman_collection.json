@@ -1,0 +1,229 @@
+{
+	"info": {
+		"_postman_id": "3032ae68-2942-4e96-b9bf-a46d2d4c0709",
+		"name": "httpBinOrg",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GetMethod",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "c8226a4c-fae6-4d52-8485-3f5155a4666a",
+						"exec": [
+							"pm.test(\"Verify status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"let jsonData = pm.response.json();",
+							"",
+							"console.log(typeof jsonData.args.isGood)",
+							"pm.test(\"Verify args.isGood value\", function () {",
+							"    pm.expect(jsonData.args.isGood).to.eql(\"true\");",
+							"});",
+							"pm.test(\"Verify args.isBad value\", function () {",
+							"    pm.expect(jsonData.args.isBad).to.eql(\"false\");",
+							"});",
+							"pm.test(\"Verify headers.Host value\", function () {",
+							"    pm.expect(jsonData.headers.Host).to.eql(\"httpbin.org\");",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://httpbin.org/get?isGood=true&isBad=false",
+					"protocol": "http",
+					"host": [
+						"httpbin",
+						"org"
+					],
+					"path": [
+						"get"
+					],
+					"query": [
+						{
+							"key": "isGood",
+							"value": "true"
+						},
+						{
+							"key": "isBad",
+							"value": "false"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PostjttpBinOrg",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "8f81596b-6f21-4d35-b194-f756ffd98d38",
+						"exec": [
+							"let date = Date.now();",
+							"console.log(date)",
+							"pm.globals.set(\"currentDate\", date);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "1c564c5a-146d-4c78-aa5a-d117c4f27198",
+						"exec": [
+							"",
+							"let jsonData = pm.response.json();",
+							"pm.test(\"Verify curentDate value \", function () {",
+							"    pm.expect(jsonData.json.currentDate).to.eql(pm.globals.get(\"currentDate\"));",
+							"});",
+							"",
+							"pm.test(\"Verify json array include some value\", function () {",
+							"    pm.expect(jsonData.json.permissions).to.include(4000);",
+							"});",
+							"",
+							"console.log(jsonData.json.permissions)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n   \"name\":\"john\",\n   \"permissions\":[2000,3000,4000,5000],\n   \"currentDate\":{{currentDate}}\n}"
+				},
+				"url": {
+					"raw": "http://httpbin.org/post",
+					"protocol": "http",
+					"host": [
+						"httpbin",
+						"org"
+					],
+					"path": [
+						"post"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PuthttpBinOrg",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "00d29fbe-f794-448b-9286-b08c9d8539e3",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Content-Type is present\", function () {",
+							"    pm.response.to.have.header(\"Content-Type\");",
+							"});",
+							"",
+							"pm.test(\"Content-Type value is application/json\", function () {",
+							"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.eql(\"application/json\");",
+							"",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "ryma",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "ryma@example.com",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://httpbin.org/put",
+					"protocol": "http",
+					"host": [
+						"httpbin",
+						"org"
+					],
+					"path": [
+						"put"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeletehttpBin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "10ccdda4-473e-4a99-8d71-53279f9fe20b",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://httpbin.org/delete",
+					"protocol": "http",
+					"host": [
+						"httpbin",
+						"org"
+					],
+					"path": [
+						"delete"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
